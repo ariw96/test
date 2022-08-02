@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import "./App.css";
 
 function App() {
-	const [price, setPrice] = useState(0);
+	const [price, setPrice] = useState("");
 	const [tax, setTax] = useState(0);
-	const [maam, setMaam] = useState(0);
+	const [maam, setMaam] = useState(17);
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [safety, setSafety] = useState(true);
 	const [electric, setElectric] = useState(true);
@@ -63,79 +63,105 @@ function App() {
 		}
 	};
 	return (
-		<div className="App">
-			<header className="App-header">
-				<form
-					onSubmit={(e) => {
-						handleSubmit(e);
-					}}
-				>
-					<h3> אנא מלאו את הפרטים </h3>
+		<>
+			<div className="App">
+				<div>
+					<header className="App-header">
+						<form
+							onSubmit={(e) => {
+								handleSubmit(e);
+							}}
+						>
+							<h3> אנא מלאו את הפרטים </h3>
 
-					<label>מחיר הרכב באתר היצרן</label>
-					<br />
-					<input
-						type="number"
-						value={price}
-						required
-						min="0"
-						onChange={(e) => {
-							handlePriceChange(e);
-						}}
-					/>
-					<br />
-					<div className="tax">
-						<div>
-							<label>אחוז מע"מ</label>
+							<label>מחיר הרכב באתר היצרן</label>
 							<br />
 							<input
 								type="number"
-								value={tax}
-								onChange={(e) => {
-									handleTaxChange(e);
-								}}
-							/>
-						</div>
-						<div>
-							<label>אחוז מס רכב בישראל</label>
-							<br />
-							<input
-								className="maam"
-								type="number"
-								value={maam}
+								value={price}
 								required
+								min="0"
 								onChange={(e) => {
-									handleMaamChange(e);
+									handlePriceChange(e);
 								}}
 							/>
 							<br />
-						</div>
-					</div>
-					<div>
-						<label>מערכת בטיחות מותקנת</label>
-						<input type="checkbox" className="safety" onChange={handleSafety} />
-					</div>
-					<div>
-						<label>רכב חשמלי</label>
-						<input
-							type="checkbox"
-							className="electric"
-							onChange={handleElectric}
-						/>
-					</div>
+							<div className="tax">
+								<div>
+									<label>אחוז מע"מ</label>
+									<br />
+									<input
+										className="maam"
+										type="number"
+										value={maam}
+										required
+										onChange={(e) => {
+											handleMaamChange(e);
+										}}
+									/>
+									<br />
+								</div>
+								<div>
+									<label>אחוז מס רכב בישראל</label>
+									<br />
+									<input
+										type="number"
+										value={tax}
+										onChange={(e) => {
+											handleTaxChange(e);
+										}}
+									/>
+								</div>
+							</div>
+							<div>
+								<label>מערכת בטיחות מותקנת</label>
+								<input
+									type="checkbox"
+									className="safety"
+									onChange={handleSafety}
+								/>
+							</div>
+							<div>
+								<label>רכב חשמלי</label>
+								<input
+									type="checkbox"
+									className="electric"
+									onChange={handleElectric}
+								/>
+							</div>
 
-					<input type="submit" value="חישוב המחיר" />
-				</form>
-				<h3> {totalPrice} :מחיר הרכב הסופי בישראל</h3>
-				<p> {price} :המחיר באתר החברה</p>
-				<p> {price * (1 + maam / 100)} :לאחר מס</p>
-				<p> {price * (1 + tax / 100)} :לאחר מע"מ</p>
-				<p>
-					{price - price * electricDiscount} :לאחר הנחה של רכב חשמלי(אם קיים)
-				</p>
-				<p> {price - safetyDiscount} :לאחר הנחה של מערכת בטיחות (אם קיים)</p>
-			</header>
-		</div>
+							<input type="submit" value="חישוב המחיר" />
+						</form>
+						<h3> :מחיר הרכב הסופי בישראל</h3>
+						<div className="box">{totalPrice}</div>
+						<p>
+							{price} :המחיר באתר החברה
+							<br />
+							{price * (1 + maam / 100)} :לאחר מס
+							<br />
+							{price * (1 + tax / 100)} :לאחר מע"מ
+							<br />
+							{price - price * electricDiscount} :לאחר הנחה של רכב חשמלי(אם
+							קיים)
+							<br />
+							{price - safetyDiscount} :לאחר הנחה של מערכת בטיחות (אם קיים)
+						</p>
+					</header>
+				</div>
+			</div>
+			<div>
+				<h2>חישוב מחיר רכב</h2>
+				<h3>
+					בטופס זה תוכל לחשב את מחיר <br />
+					הרכב בישראל,על סמך מחירו בחו"ל
+				</h3>
+				<img
+					src={
+						"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7_MfocG_Z2rKO5vdDLZ68j4ReSAr94LQ7Fg&usqp=CAU"
+					}
+				/>
+			</div>
+		</>
 	);
 }
 
