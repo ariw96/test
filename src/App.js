@@ -24,7 +24,7 @@ function App() {
 	const handleSafety = () => {
 		setSafety(!safety);
 		if (safety) {
-			setSafetyDiscount(40);
+			setSafetyDiscount(4000);
 		} else {
 			setSafetyDiscount(0);
 		}
