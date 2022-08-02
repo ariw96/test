@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import "./App.css";
 
@@ -6,12 +6,21 @@ function App() {
 	const [price, setPrice] = useState(0);
 	const [tax, setTax] = useState(0);
 	const [maam, setMaam] = useState(0);
-	const [percent, setPercent] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [safety, setSafety] = useState(true);
 	const [electric, setElectric] = useState(true);
 	const [safetyDiscount, setSafetyDiscount] = useState(0);
 	const [electricDiscount, setElectricDiscount] = useState(0);
+	useEffect(() => {
+		const fetchData = async () => {
+			const result = await fetch("https://myfakeapi.com/api/cars/23");
+			const data = await result.json();
+			let apiPrice = parseInt(data.Car.price.slice(1)) * 200;
+			console.log(apiPrice);
+			setPrice(apiPrice);
+		};
+		fetchData();
+	}, []);
 	const handleSafety = () => {
 		setSafety(!safety);
 		if (safety) {
@@ -42,13 +51,16 @@ function App() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
-		setTotalPrice(
-			price * (1 + tax / 100) +
-				price * (maam / 100) -
-				price * electricDiscount -
-				safetyDiscount
-		);
+		if (price < 0) {
+			alert("Price cannot be negative");
+		} else {
+			setTotalPrice(
+				price * (1 + tax / 100) +
+					price * (maam / 100) -
+					price * electricDiscount -
+					safetyDiscount
+			);
+		}
 	};
 	return (
 		<div className="App">
@@ -66,6 +78,7 @@ function App() {
 						type="number"
 						value={price}
 						required
+						min="0"
 						onChange={(e) => {
 							handlePriceChange(e);
 						}}
@@ -115,10 +128,12 @@ function App() {
 				</form>
 				<h3> {totalPrice} :מחיר הרכב הסופי בישראל</h3>
 				<p> {price} :המחיר באתר החברה</p>
-				<p> {price * (1 + tax / 100)} :לאחר מס</p>
-				<p> {price * (1 + maam / 100)} :לאחר מע"מ</p>
-				<p> {price - price * 0.1} :לאחר הנחה של רכב חשמלי(אם קיים)</p>
-				<p> {price - 4000} :לאחר הנחה של מערכת בטיחות (אם קיים)</p>
+				<p> {price * (1 + maam / 100)} :לאחר מס</p>
+				<p> {price * (1 + tax / 100)} :לאחר מע"מ</p>
+				<p>
+					{price - price * electricDiscount} :לאחר הנחה של רכב חשמלי(אם קיים)
+				</p>
+				<p> {price - safetyDiscount} :לאחר הנחה של מערכת בטיחות (אם קיים)</p>
 			</header>
 		</div>
 	);
